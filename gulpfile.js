@@ -7,7 +7,7 @@ var gulp = require('gulp'),
 
 gulp.task('lint', function () {
   'use strict';
-  return gulp.src('./lib/**/*.js')
+  return gulp.src(['lib/**/*.js', 'tests/**/*.js'])
     .pipe(jshint())
     .pipe(jshint.reporter(stylish))
     .pipe(jshint.reporter('fail'));
@@ -15,12 +15,12 @@ gulp.task('lint', function () {
 
 gulp.task('test', ['lint'], function () {
   'use strict';
-  return gulp.src(['tests/*.js'], { read: false })
+  return gulp.src(['tests/*.js'], {read: false})
     .pipe(mocha({bail: true}));
-    //.on('error', gutil.log);
+  //.on('error', gutil.log);
 });
 
 gulp.task('watch', function () {
   'use strict';
-  gulp.watch(['lib/**', 'tests/**'], ['lint', 'test']);
+  gulp.watch(['gulpfile.js', 'lib/**', 'tests/**'], ['lint', 'test']);
 });

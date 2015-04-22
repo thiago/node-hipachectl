@@ -1,12 +1,16 @@
 var HipacheCtl = require('../lib'),
+  url = require('url'),
   demand = require('must'),
-  Promisse = require('bluebird'),
-  redis = require("redis");
+  redis = require("redis"),
+  REDIS_URL = url.parse(process.env.REDIS_PORT_6379 || process.env.REDIS_URL || 'tcp://redis:6379'),
+  REDIS_HOSTNAME = REDIS_URL.hostname,
+  REDIS_PORT = REDIS_URL.port;
+
 
 describe('HipacheCtl', function () {
   var client, hipache;
   beforeEach(function (done) {
-    client = redis.createClient(6379, '192.168.99.107');
+    client = redis.createClient(REDIS_PORT, REDIS_HOSTNAME);
     client.flushall(function () {
       done();
     });
@@ -37,25 +41,64 @@ describe('HipacheCtl', function () {
   it('hipache.find', function (done) {
     hipache.client.rpushAsync('frontend:hipachectl.com', 'http://127.0.0.1')
       .then(function () {
-        hipache.find('hipachectl.com', '127.0.0.1', '').then(function (hosts) {
-          demand(hosts).to.be.an.array();
-          demand(hosts).length(1);
-          demand(hosts).to.include('http://127.0.0.1');
-          done();
-        });
+        return hipache.find('hipachectl.com', '127.0.0.1', '');
+      }).then(function (hosts) {
+        demand(hosts).to.be.an.array();
+        demand(hosts).length(1);
+        demand(hosts).to.include('http://127.0.0.1');
+        done();
       });
   });
 
-  it('hipache.push', function (done) {
-    hipache.push('hipachectl.com', '127.0.0.1').then(function (hosts) {
+  it('hipache.rename', function (done) {
+    hipache.rename('currenthostname.com').catch(function (err) {
+      demand(err).to.be.a(Error);
+    }).then(function () {
+      return hipache.client.rpushAsync('frontend:currenthostname.com', 'http://127.0.0.1');
+    }).then(function () {
+      return hipache.rename('currenthostname.com', 'newhostname.com');
+    }).then(function () {
+      return hipache.find('newhostname.com', '127.0.0.1', '');
+    }).then(function (hosts) {
       demand(hosts).to.be.an.array();
       demand(hosts).length(1);
-      hipache.find('hipachectl.com').then(function (ips) {
-        demand(ips).to.be.an.array();
-        demand(ips).length(1);
-        demand(ips).to.include('http://127.0.0.1');
+      demand(hosts).to.include('http://127.0.0.1');
+      done();
+    });
+  });
+
+  it('hipache.add', function (done) {
+    hipache.add('hipachectl.com', '127.0.0.1')
+      .then(function (hosts) {
+      demand(hosts).to.be.an.array();
+      demand(hosts).length(1);
+      return hipache.find('hipachectl.com');
+    }).then(function (ips) {
+      demand(ips).to.be.an.array();
+      demand(ips).length(1);
+      demand(ips).to.include('http://127.0.0.1');
+      done();
+    });
+  });
+
+  it('hipache.remove', function (done) {
+    var host = 'hostname.com';
+    hipache.add(host, '127.0.0.1', 'mysite')
+      .then(function (hosts) {
+        demand(hosts).to.be.an.array();
+        demand(hosts).length(2);
+        return hipache.find(host);
+      })
+      .then(function (hosts) {
+        demand(hosts).to.be.an.array();
+        demand(hosts).length(2);
+        return hosts;
+      }).then(function () {
+        return hipache.client.lrem(host, 0, 'http://127.0.0.1');
+      }).then(function () {
+        return hipache.find(host, '127.0.0.1');
+      }).then(function(){
         done();
       });
-    });
   });
 });
