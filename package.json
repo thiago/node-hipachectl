@@ -1,12 +1,6 @@
 {
   "name": "hipachectl",
   "version": "0.0.0",
-  "dependencies": {
-    "hiredis": "^0.3.0",
-    "redis": "^0.12.1",
-    "underscore": "^1.8.3",
-    "url-parse": "^1.0.0"
-  },
   "scripts": {
     "test": "./node_modules/gulp/bin/gulp.js test"
   },
@@ -14,13 +8,21 @@
     "url": "https://github.com/trsouz"
   },
   "main": "./lib/index.js",
-  "repository": "https://github.com/trsouz/hipachectl",
+  "repository": "https://github.com/trsouz/node-hipachectl",
+  "dependencies": {
+    "bluebird": "^2.9.24",
+    "hiredis": "^0.3.0",
+    "redis": "^0.12.1",
+    "underscore": "^1.8.3",
+    "url-parse": "^1.0.0"
+  },
   "devDependencies": {
-    "mocha": "1.*",
-    "must": ">= 0.11 < 1",
     "gulp": "3.*",
     "gulp-jshint": "1.*",
     "gulp-mocha": "0.*",
-    "jshint-stylish": "0.*"
+    "gulp-watch": "^4.2.4",
+    "jshint-stylish": "0.*",
+    "mocha": "1.*",
+    "must": ">= 0.11 < 1"
   }
 }

@@ -1,4 +1,4 @@
-# hipachectl [![Build Status](https://secure.travis-ci.org/trsouz/hipachectl.png?branch=master)](https://travis-ci.org/trsouz/hipachectl)
+# hipachectl [![Build Status](https://secure.travis-ci.org/trsouz/node-hipachectl.png?branch=master)](https://travis-ci.org/trsouz/node-hipachectl)
 
 hipache
 
