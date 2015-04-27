@@ -9,13 +9,16 @@ var HipacheCtl = require('../lib'),
 
 describe('HipacheCtl', function () {
   var client, hipache;
-  beforeEach(function (done) {
+
+  before(function(){
     client = redis.createClient(REDIS_PORT, REDIS_HOSTNAME);
-    client.flushall(function () {
+  });
+
+  beforeEach(function (done) {
+    client.flushdb(function () {
       done();
     });
   });
-
 
   after(function () {
     client.quit();
@@ -103,4 +106,5 @@ describe('HipacheCtl', function () {
         done();
       });
   });
+
 });
