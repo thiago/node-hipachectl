@@ -1,7 +1,18 @@
-install:
-- curl -sLo - http://j.mp/install-travis-docker | sh -xe
+language: node_js
+node_js:
+  - "0.12"
+  - "0.11"
+  - "0.10"
+  - "0.8"
+  - "0.6"
+  - "iojs"
+  - "iojs-v1.0.4"
 
-script:
-- ./run 'rm -rf node_modules && docker-compose run node012 npm install && docker-compose run node012 npm test'
-- ./run 'rm -rf node_modules && docker-compose run node010 npm install && docker-compose run node010 npm test'
-- ./run 'rm -rf node_modules && docker-compose run node08 npm install && docker-compose run node08 npm test'
+env:
+  - REDIS_URL=tcp://localhost:6379
+
+services:
+  - redis-server
+
+email:
+    on_success: never
