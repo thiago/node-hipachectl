@@ -12,8 +12,6 @@
   "repository": "https://github.com/trsouz/node-hipachectl",
   "dependencies": {
     "bluebird": "^2.9.24",
-    "hiredis": "^0.3.0",
-    "redis": "^0.12.1",
     "underscore": "^1.8.3",
     "url-parse": "^1.0.0"
   },
@@ -24,6 +22,8 @@
     "gulp-util": "^3.0.4",
     "gulp-watch": "^4.2.4",
     "jshint-stylish": "0.*",
+    "hiredis": "^0.3.0",
+    "redis": "^0.12.1",
     "mocha": "1.*",
     "must": ">= 0.11 < 1"
   }
