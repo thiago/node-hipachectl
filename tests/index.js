@@ -30,6 +30,11 @@ describe('HipacheCtl', function () {
     demand(hipache).length(0);
   });
 
+  it('hipache.formatHost', function () {
+    demand(hipache.formatHost()).to.equal(null);
+    demand(hipache.formatHost('www.mysite.com')).to.equal(hipache.hostnamePrefix + 'www.mysite.com');
+  });
+
   it('hipache.formatUrl', function () {
     demand(hipache.formatUrl()).to.equal(null);
     demand(hipache.formatUrl('127.0.0.1')).to.equal('http://127.0.0.1');
@@ -70,34 +75,31 @@ describe('HipacheCtl', function () {
   it('hipache.add', function (done) {
     hipache.add('hipachectl.com', '127.0.0.1')
       .then(function (hosts) {
-      demand(hosts).to.be.an.array();
-      demand(hosts).length(1);
-      return hipache.find('hipachectl.com');
-    }).then(function (ips) {
-      demand(ips).to.be.an.array();
-      demand(ips).length(1);
-      demand(ips).to.include('http://127.0.0.1');
-      done();
-    });
+        demand(hosts).to.be.an.array();
+        demand(hosts).length(1);
+        return hipache.find('hipachectl.com');
+      }).then(function (ips) {
+        demand(ips).to.be.an.array();
+        demand(ips).length(1);
+        demand(ips).to.include('http://127.0.0.1');
+        done();
+      });
   });
 
   it('hipache.remove', function (done) {
     var host = 'hostname.com';
-    hipache.add(host, '127.0.0.1', 'mysite')
-      .then(function (hosts) {
-        demand(hosts).to.be.an.array();
-        demand(hosts).length(2);
-        return hipache.find(host);
-      })
-      .then(function (hosts) {
-        demand(hosts).to.be.an.array();
-        demand(hosts).length(2);
-        return hosts;
-      }).then(function () {
-        return hipache.client.lrem(host, 0, 'http://127.0.0.1');
-      }).then(function () {
-        return hipache.find(host, '127.0.0.1');
-      }).then(function(){
+    hipache.add(host, '127.0.0.1', 'mysite', 'mysite', 'mysite')
+      .then(function () {
+        return hipache.remove(host, 'mysite', '127.0.0.1', 'notexist');
+      }).then(function (removed) {
+        demand(removed).to.be.an.array();
+        demand(removed).length(3);
+        demand(removed).to.include(0);
+        demand(removed).to.include(1);
+        return hipache.remove(host);
+      }).then(function (removed) {
+        demand(removed).to.be.an.number();
+        demand(removed).to.be.equal(0);
         done();
       });
   });
