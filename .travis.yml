@@ -2,6 +2,6 @@ install:
 - curl -sLo - http://j.mp/install-travis-docker | sh -xe
 
 script:
-- ./run 'docker-compose run nodelatest npm install && docker-compose run nodelatest npm test'
-- ./run 'docker-compose run node010 npm install && docker-compose run node010 npm test'
-- ./run 'docker-compose run node08 npm install && docker-compose run node08 npm test'
+- ./run 'rm -rf node_modules && docker-compose run node012 npm install && docker-compose run node012 npm test'
+- ./run 'rm -rf node_modules && docker-compose run node010 npm install && docker-compose run node010 npm test'
+- ./run 'rm -rf node_modules && docker-compose run node08 npm install && docker-compose run node08 npm test'
