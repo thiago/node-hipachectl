@@ -4,13 +4,26 @@ hipache
 
 ## Install
 
-```bash
-npm install --save hipachectl
-```
+    npm install --save hipachectl
 
-## Examples
+## Usage
 
-See `examples/` for different use cases.
+    var redis = require("redis"),
+        client = redis.createClient(),
+        hipache = new require("hipachectl")(client);
+    
+    hipache.add("myvhost.com.br", "127.0.0.1:3000").then(function(){
+        console.log('Added');
+    });
+    
+## API
+
+### add(vhost, address, [address, ...])
+### find(vhost, [address, ...])
+### remove(vhost, [address, ...])
+### rename(vhost, newVHost)
+### formatHost(vhost)
+### formatUrl(address)
 
 ## License
 
