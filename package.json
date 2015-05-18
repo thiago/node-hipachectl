@@ -8,10 +8,15 @@
   "author": {
     "url": "https://github.com/trsouz"
   },
-  "main": "./lib/index.js",
   "repository": "https://github.com/trsouz/node-hipachectl",
+  "main": "./lib/index.js",
+  "bin" : {
+    "hipachectl" : "./lib/cli.js"
+  },
   "dependencies": {
     "bluebird": "^2.9.24",
+    "commander": "^2.8.1",
+    "redis": "^0.12.1",
     "underscore": "^1.8.3",
     "url-parse": "^1.0.0"
   },
@@ -23,7 +28,6 @@
     "gulp-watch": "^4.2.4",
     "jshint-stylish": "0.*",
     "hiredis": "^0.3.0",
-    "redis": "^0.12.1",
     "mocha": "1.*",
     "must": ">= 0.11 < 1"
   }
