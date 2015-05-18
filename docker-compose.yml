@@ -2,7 +2,7 @@ node012:
   image: node:0.12-wheezy
   working_dir: /usr/src/app
   links:
-    - hipache:redis
+    - redis
   volumes:
     - .:/usr/src/app
 
@@ -10,17 +10,9 @@ node010:
   image: node:0.10-wheezy
   working_dir: /usr/src/app
   links:
-    - hipache:redis
+    - redis
   volumes:
     - .:/usr/src/app
 
-node08:
-  image: node:0.8-wheezy
-  working_dir: /usr/src/app
-  links:
-    - hipache:redis
-  volumes:
-    - .:/usr/src/app
-
-hipache:
-  image: hipache
+redis:
+  image: redis
