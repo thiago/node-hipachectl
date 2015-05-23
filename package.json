@@ -1,6 +1,6 @@
 {
   "name": "hipachectl",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Library and CLI to control Hipache",
   "scripts": {
     "test": "./node_modules/gulp/bin/gulp.js test",
