@@ -2,7 +2,7 @@ var HipacheCtl = require('../lib'),
   url = require('url'),
   demand = require('must'),
   redis = require("redis"),
-  REDIS_URL = url.parse(process.env.REDIS_PORT_6379 || process.env.REDIS_URL || 'tcp://redis:6379'),
+  REDIS_URL = url.parse(process.env.REDIS_PORT_6379_TCP || process.env.REDIS_URL || 'tcp://redis:6379'),
   REDIS_HOSTNAME = REDIS_URL.hostname,
   REDIS_PORT = REDIS_URL.port;
 
@@ -371,6 +371,21 @@ describe('hipache.add', function () {
       });
   });
 
+  it('Ensure identifier is created when add a backend', function (done) {
+    hipache.add('frontend', '127.0.0.1')
+      .then(function (hosts) {
+        demand(hosts).to.be.an.array();
+        demand(hosts).length(1);
+        return hipache.find('frontend');
+      }).then(function (ips) {
+        demand(ips).to.be.an.array();
+        demand(ips).length(2);
+        demand(ips).to.include('http://127.0.0.1');
+        demand(ips).to.include('frontend');
+        done();
+      });
+  });
+
   it('Add one backend', function (done) {
     hipache.add('frontend', '127.0.0.1')
       .then(function (hosts) {
@@ -379,7 +394,7 @@ describe('hipache.add', function () {
         return hipache.find('frontend');
       }).then(function (ips) {
         demand(ips).to.be.an.array();
-        demand(ips).length(1);
+        demand(ips).length(2);
         demand(ips).to.include('http://127.0.0.1');
         done();
       });
@@ -393,7 +408,7 @@ describe('hipache.add', function () {
         return hipache.find('frontend');
       }).then(function (ips) {
         demand(ips).to.be.an.array();
-        demand(ips).length(2);
+        demand(ips).length(3);
         demand(ips).to.include('http://127.0.0.1');
         demand(ips).to.include('http://127.0.0.2');
         done();
@@ -416,7 +431,7 @@ describe('hipache.add', function () {
       })
       .then(function (backends) {
         demand(backends).to.be.an.array();
-        demand(backends).length(1);
+        demand(backends).length(2);
         demand(backends).to.include('http://127.0.0.1');
         done();
       });
@@ -432,7 +447,7 @@ describe('hipache.add', function () {
       })
       .then(function (backends) {
         demand(backends).to.be.an.array();
-        demand(backends).length(2);
+        demand(backends).length(3);
         demand(backends).to.include('http://127.0.0.1');
         demand(backends).to.include('http://127.0.0.2');
         done();
@@ -489,7 +504,7 @@ describe('hipache.rename', function () {
       })
       .then(function (hosts) {
         demand(hosts).to.be.an.array();
-        demand(hosts).length(1);
+        demand(hosts).length(2);
         demand(hosts).to.include('http://127.0.0.1');
         return hipache.find('currenthostname.com');
       })
@@ -557,7 +572,7 @@ describe('hipache.remove', function () {
       })
       .then(function (removed) {
         demand(removed).to.be.an.array();
-        demand(removed).length(1);
+        demand(removed).length(2);
         demand(removed).to.include('http://127.0.0.3');
         done();
       });
